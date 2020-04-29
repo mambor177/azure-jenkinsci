@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  labels:
+      app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      serviceAccountName: jenkins
+      containers:
+        - name: jenkins
+          image: --CONTAINER_REGISTRY_FQDN--/jenkins-on-kubernetes:--JENKINS_TAG--
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 600Mi
+              cpu: "1"
+            requests:
+              memory: 300Mi
+              cpu: 500m
+          env:
+            - name: JAVA_OPTS
+              value: -Djenkins.install.runSetupWizard=false
+            - name: JENKINS_OPTS
+              value: --httpsPort=8443 --httpsCertificate=/var/lib/jenkins/cert.pem --httpsPrivateKey=/var/lib/jenkins/key_rsa.pem
+            - name: CASC_JENKINS_CONFIG
+              value": /var/jenkins_config/jenkins.yaml
+          ports:
+            - name: http-port
+              containerPort: 8080
+            - name: https-port
+              containerPort: 8443
+            - name: jnlp-port
+              containerPort: 50000
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+      volumes:
+        - name: jenkins-home
+          emptyDir: {}

@@ -1,0 +1,116 @@
+jenkins:
+  agentProtocols:
+  - "JNLP4-connect"
+  - "Ping"
+  authorizationStrategy:
+    azureAdMatrix:
+      permissions:
+      - "Overall/Administer:Joshua Lynch (cbdf1889-6159-4488-95fb-163329bfdc23)"
+  clouds:
+  - kubernetes:
+      containerCap: 10
+      containerCapStr: "10"
+      jenkinsUrl: "http://jenkins-internal.jenkins:8080"
+      maxRequestsPerHost: 32
+      maxRequestsPerHostStr: "32"
+      name: "kubernetes"
+      namespace: "jenkins"
+      skipTlsVerify: true
+      templates:
+      - containers:
+        - args: "cat"
+          command: "/bin/sh -c"
+          image: "jenkins/inbound-agent"
+          livenessProbe:
+            failureThreshold: 0
+            initialDelaySeconds: 0
+            periodSeconds: 0
+            successThreshold: 0
+            timeoutSeconds: 0
+          name: "inbound-agent"
+          ttyEnabled: true
+          workingDir: "/home/jenkins/agent"
+        hostNetwork: false
+        label: "inbound-agent"
+        name: "inbound-agent"
+        namespace: "jenkins"
+        yamlMergeStrategy: "override"
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+  disableRememberMe: false
+  markupFormatter: "plainText"
+  mode: NORMAL
+  myViewsTabBar: "standard"
+  numExecutors: 2
+  primaryView:
+    all:
+      name: "all"
+  projectNamingStrategy: "standard"
+  quietPeriod: 5
+  remotingSecurity:
+    enabled: false
+  scmCheckoutRetryCount: 0
+  securityRealm:
+    azure:
+      cacheDuration: 0
+      clientId: "****"
+      clientSecret: "{AQAAABAAAAAw6pm5Qnu3l1z6s4isxEjHzOFrixcV9eXGtj+umP1/7jgEwwJlOKAKIlsPp9O+YLNXXiMvjvR6XrPYKwiHbP/0oA==}"
+      tenant: "****"
+  slaveAgentPort: 50000
+  updateCenter:
+    sites:
+    - id: "default"
+      url: "https://updates.jenkins.io/update-center.json"
+  views:
+  - all:
+      name: "all"
+  viewsTabBar: "standard"
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  sSHD:
+    port: -1
+unclassified:
+  appInsightsGlobalConfig:
+    appInsightsEnabled: true
+  buildDiscarders:
+    configuredBuildDiscarders:
+    - "jobBuildDiscarder"
+  defaultFolderConfiguration:
+    healthMetrics:
+    - worstChildHealthMetric:
+        recursive: true
+  extendedEmailPublisher:
+    adminRequiredForTemplateTesting: false
+    allowUnregisteredEnabled: false
+    charset: "UTF-8"
+    debugMode: false
+    defaultBody: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:\r\n\r\nCheck\
+      \ console output at $BUILD_URL to view the results."
+    defaultContentType: "text/plain"
+    defaultSubject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!"
+    maxAttachmentSize: -1
+    maxAttachmentSizeMb: 0
+    precedenceBulk: false
+    useSsl: false
+    watchingEnabled: false
+  location:
+    adminAddress: "address not configured yet <nobody@nowhere>"
+    url: "https://jenkins-lb.jenkins.svc.cluster.local/"
+  mailer:
+    charset: "UTF-8"
+    useSsl: false
+    useTls: false
+  pollSCM:
+    pollingThreadCount: 10
+  slackNotifier:
+    botUser: false
+    sendAsText: false
+tool:
+  git:
+    installations:
+    - home: "git"
+      name: "Default"

@@ -1,0 +1,47 @@
+jenkins:
+  authorizationStrategy:
+    azureAdMatrix:
+      permissions:
+      - "Overall/Administer:Joshua Lynch (cbdf1889-6159-4488-95fb-163329bfdc23)"
+  clouds:
+  - kubernetes:
+      containerCap: 10
+      containerCapStr: "10"
+      jenkinsUrl: "http://jenkins-internal.jenkins:8080"
+      maxRequestsPerHost: 32
+      maxRequestsPerHostStr: "32"
+      name: "kubernetes"
+      namespace: "jenkins"
+      skipTlsVerify: true
+      templates:
+      - containers:
+        - args: "cat"
+          command: "/bin/sh -c"
+          image: "jenkins/inbound-agent"
+          livenessProbe:
+            failureThreshold: 0
+            initialDelaySeconds: 0
+            periodSeconds: 0
+            successThreshold: 0
+            timeoutSeconds: 0
+          name: "inbound-agent"
+          ttyEnabled: true
+          workingDir: "/home/jenkins/agent"
+        hostNetwork: false
+        label: "inbound-agent"
+        name: "inbound-agent"
+        namespace: "jenkins"
+        yamlMergeStrategy: "override"
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+  securityRealm:
+    azure:
+      cacheDuration: 0
+      clientId: "fe540c0a-eb09-4085-bb75-09cf2b4456af"
+      clientSecret: "******"
+      tenant: "c5dfe39d-8c38-4b78-bde6-226c2caf434e"
+unclassified:
+  location:
+    adminAddress: "jlynch177@gmail.com"
+    url: "https://jenkins-lb.jenkins.svc.cluster.local/"
